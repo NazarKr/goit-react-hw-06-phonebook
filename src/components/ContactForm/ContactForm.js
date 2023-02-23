@@ -1,44 +1,28 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
+import { useDispatch } from 'react-redux';
 import { Button } from 'components/Buttons/Buttons';
 import { addContact } from 'redux/contactSlice';
 import css from './Contact.module.css';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const allContacts = useSelector(getContacts);
 
-  const isDublicate = (title, author) => {
-    const normalizedTitle = title.toLowerCase();
-    const normalizedAuthor = author.toLowerCase();
-    const result = allContacts.find(({ title, author }) => {
-      return (
-        title.toLowerCase() === normalizedTitle &&
-        author.toLowerCase() === normalizedAuthor
-      );
-    });
-
-    return Boolean(result);
+  const handleSubmit = event => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const newContact = {
+      id: Date.now(),
+      name: formData.get('name'),
+      number: formData.get('number'),
+    };
+    dispatch(addContact(newContact));
   };
-
-  const handleSubmit = ({ name, number }) => {
-     if (isDublicate(name, number)) {
-       alert(`${name}. Author: ${number} is already ixist`);
-       return false;
-    }
-    
-    dispatch(addContact({ name, number }));
-
-    console.log(addContact({ name, number }));
-  };
-
 
   return (
     <form className={css.form} onSubmit={handleSubmit}>
       <input
         className={css.field}
-        type="text"
-        name="text"
+        type="name"
+        name="name"
         placeholder="Enter  name..."
       />
       <input
