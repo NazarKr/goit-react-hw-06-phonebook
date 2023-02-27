@@ -1,22 +1,22 @@
 import css from './FilterForm.module.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { filterReducer } from 'redux/filtersSlice';
+import { useDispatch } from 'react-redux';
+import { setFilterValue } from 'redux/filtersSlice';
 
 export function FilterForm() {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.contacts.filter);
 
-  const handleFilter = event => {
-    dispatch(filterReducer(event.currentTarget.value));
-  };
+  const handleFilter = e => {
+    const value = e.currentTarget.value.toLowerCase().trim();
+    dispatch(setFilterValue(value));  };
 
   return (
     <input
       className={css.filterInput}
       type="text"
-      value={filter}
+      id="filter"
+      name="filter"
+      placeholder="Contact name"
       onChange={handleFilter}
-      placeholder="Find contact by name"
     />
   );
 }
