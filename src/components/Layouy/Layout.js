@@ -1,5 +1,5 @@
-import css from './Layout.module.css';
+import { MainContainer } from "./Layout.styled";
 
 export const Layout = ({ children }) => {
-  return <main className={css.container}>{children}</main>;
+  return <MainContainer>{children}</MainContainer>;
 };

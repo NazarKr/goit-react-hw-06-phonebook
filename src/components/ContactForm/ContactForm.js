@@ -3,9 +3,13 @@ import { Formik, ErrorMessage } from 'formik';
 import { nanoid } from 'nanoid';
 import { Button } from 'components/Buttons/Buttons';
 import { addContact } from 'redux/contactSlice';
-// import css from './Contact.module.css';
-import { PhonebookForm as Form, Input, Label, Error } from './ContactForm.styled';
 import * as Yup from 'yup';
+import {
+  PhonebookForm as Form,
+  Input,
+  Label,
+  Error,
+} from './ContactForm.styled';
 
 
 const phoneRegExp =
@@ -22,62 +26,51 @@ const ValidationSchema = Yup.object().shape({
     .required('Required'),
 });
 
-
 export const ContactForm = () => {
   const dispatch = useDispatch();
   const handleContactAdd = contact => dispatch(addContact(contact));
 
+  return (
+    <Formik
+      initialValues={{
+        firstName: '',
+        lastName: '',
+        tel: '',
+      }}
+      validationSchema={ValidationSchema}
+      onSubmit={({ firstName, lastName, tel }, { resetForm }) => {
+        const name = (firstName, lastName) => {
+          if (lastName) {
+            return firstName.trim() + ' ' + lastName.trim();
+          }
+          return firstName.trim();
+        };
 
- return (
-   <Formik
-     initialValues={{
-       firstName: '',
-       lastName: '',
-       tel: '',
-     }}
-     validationSchema={ValidationSchema}
-     onSubmit={({ firstName, lastName, tel }, { resetForm }) => {
-       const name = (firstName, lastName) => {
-         if (lastName) {
-           return firstName.trim() + ' ' + lastName.trim();
-         }
-         return firstName.trim();
-       };
+        const contact = {
+          id: nanoid(),
+          name: name(firstName, lastName),
+          number: tel.trim(),
+        };
 
-       const contact = {
-         id: nanoid(),
-         name: name(firstName, lastName),
-         number: tel.trim(),
-       };
+        handleContactAdd(contact);
+        resetForm();
+      }}
+    >
+      <Form>
+        <Label htmlFor="firstName">First Name</Label>
+        <Input id="firstName" name="firstName" placeholder="Name" />
+        <ErrorMessage name="firstName" component={Error} />
 
-       handleContactAdd(contact);
-       resetForm();
-     }}
-   >
-     <Form>
-           <Label htmlFor="firstName">First Name</Label>
-               <Input id="firstName" name="firstName" placeholder="Name" />
-               <ErrorMessage name="firstName" component={Error} />
+        <Label htmlFor="lastName">Last Name</Label>
+        <Input id="lastName" name="lastName" placeholder="Last name" />
+        <ErrorMessage name="lastName" component={Error} />
 
-           <Label htmlFor="lastName">Last Name</Label>
-               <Input id="lastName" name="lastName" placeholder="Last name" />
-               <ErrorMessage name="lastName" component={Error} />
+        <Label htmlFor="tel">Phone</Label>
+        <Input id="tel" name="tel" placeholder="Phone" type="tel" />
+        <ErrorMessage name="tel" component={Error} />
 
-           <Label htmlFor="tel">Phone</Label>
-               <Input
-                 id="tel"
-                 name="tel"
-                 placeholder="000000000000"
-                 type="tel"
-               />
-               <ErrorMessage name="tel" component={Error} />
-
-       <Button
-         type="submit"
-         disabled={false}
-         children="Add contact"
-       ></Button>
-     </Form>
-   </Formik>
- );
+        <Button type="submit" disabled={false} children="Add contact"></Button>
+      </Form>
+    </Formik>
+  );
 };

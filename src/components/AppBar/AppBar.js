@@ -1,18 +1,13 @@
-// import { StatusFilter } from 'components/StatusFilter/StatusFilter';
-// import { TaskCounter } from 'components/TaskCounter/TaskCounter';
-import css from './AppBar.module.css';
+// import { Counter } from 'components/TaskCounter/TaskCounter';
+import { Header, Section, Title } from './AppBar.styled';
 
 export const AppBar = () => {
   return (
-    <header className={css.wrapper}>
-      <section className={css.section}>
-        <h2 className={css.title}>Contacts</h2>
-        {/* <TaskCounter /> */}
-      </section>
-      <section className={css.section}>
-        <h2 className={css.title}>Filter by status</h2>
-        {/* <StatusFilter /> */}
-      </section>
-    </header>
+    <Header>
+      <Section>
+        <Title>Contacts</Title>
+        {/* <Counter /> */}
+      </Section>
+    </Header>
   );
 };
