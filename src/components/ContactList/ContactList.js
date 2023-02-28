@@ -1,6 +1,6 @@
 import { Button } from 'components/Buttons/Buttons';
 import { useDispatch, useSelector } from 'react-redux';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { toast } from 'react-toastify';
 import { getContacts, getFilters } from 'redux/selectors';
 import { deleteContact } from 'redux/contactSlice';
 import {
@@ -15,7 +15,10 @@ export const ContactList = () => {
   const contacts = useSelector(getContacts);
   const filters = useSelector(getFilters);
 
-  const handleContactRemove = id => dispatch(deleteContact(id));
+  const handleContactRemove = id => {
+    dispatch(deleteContact(id))
+    toast.info('Contact was deleted')
+  };
 
   const visibleСontacts = (value, contacts) => {
     if (value) {
@@ -23,10 +26,7 @@ export const ContactList = () => {
         name.toLowerCase().includes(value)
       );
       if (visibleСontacts.length === 0) {
-        Notify.failure('No contacts with this name', {
-          showOnlyTheLastOne: true,
-          position: 'right-bottom',
-        });
+    toast.success('No contact whit this name');
       } else {
         return visibleСontacts;
       }

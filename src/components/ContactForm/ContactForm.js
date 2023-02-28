@@ -3,6 +3,8 @@ import { Formik, ErrorMessage } from 'formik';
 import { nanoid } from 'nanoid';
 import { Button } from 'components/Buttons/Buttons';
 import { addContact } from 'redux/contactSlice';
+import { toast } from 'react-toastify';
+
 import * as Yup from 'yup';
 import {
   PhonebookForm as Form,
@@ -53,6 +55,7 @@ export const ContactForm = () => {
         };
 
         handleContactAdd(contact);
+        toast.info('Contact was add');
         resetForm();
       }}
     >
